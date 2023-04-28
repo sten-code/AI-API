@@ -1,2 +1,2 @@
-models/text-generation/*
-models/stable-diffusion/*
+/models/**/*/model/*
+/models/**/*/__pycache__/
