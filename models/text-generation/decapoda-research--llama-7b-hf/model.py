@@ -6,7 +6,7 @@ import time
 
 
 def generate(prompt: str) -> str:
-    path = f"{os.path.dirname(os.path.realpath(__file__))}\\model"
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "model")
     tokenizer = LLaMATokenizer.from_pretrained(path, provider="DmlExecutionProvider")
 
     start = time.time()
