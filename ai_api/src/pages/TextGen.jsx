@@ -23,9 +23,19 @@ const getResult = async (jsonData) => {
       })
     const data = await res.json();
     console.log(data)
-    const generatedText = data.response[0].generated_text
-
-    return generatedText
+    const generatedText = data.response
+    console.log(generatedText)
+    if (generatedText.constructor.name === "Array") {
+        console.log("array")
+        const result = generatedText.map((a) => {
+            console.log(a.generated_text)
+            return a.generated_text
+        })
+        return result.join("\n")
+    } else {
+        console.log("no array")
+        return generatedText
+    }
 }
 
 const modelOptions = async () => {
@@ -56,7 +66,8 @@ export class TextGen extends Component {
         prompt: "Wat is your question?",
         models: "",
         model: "gpt2",
-        result: "Click on generate to create an answer, it may take some time!"
+        result: "Click on generate to create an answer, it may take some time!",
+        numreturn: 1
      }
   
  }
@@ -79,8 +90,8 @@ export class TextGen extends Component {
 
   submitHandler = e => { 
     e.preventDefault()
-    const { prompt, do_sample, max_new_tokens, temp, model, seed} = this.state;
-    const config = { max_new_tokens, do_sample, temp, seed};
+    const { prompt, do_sample, max_new_tokens, temp, model, seed, numreturn} = this.state;
+    const config = { max_new_tokens, do_sample, temp, seed, numreturn};
     const data = { prompt, model, config };
     const jsonData = JSON.stringify(data);
     console.log(jsonData);
@@ -91,7 +102,7 @@ export class TextGen extends Component {
   }
 
   render() {
-    const {do_sample, temp, max_new_tokens, prompt, models, model ,result, seed} = this.state
+    const {do_sample, temp, max_new_tokens, prompt, models, model ,result, seed, numreturn} = this.state
 
     return (
       <div>
@@ -114,7 +125,7 @@ export class TextGen extends Component {
                 Do Sample: 
                 <select name="do_sample" value={do_sample} onChange={this.changeHandler} className='input-box'>
                     <option value="true">True</option>
-                    <option value="false">False</option>
+                    <option value="false">False</option> 
                 </select>
             </div>
            
@@ -126,12 +137,16 @@ export class TextGen extends Component {
                 Seed: 
                 <input name="seed" className='input-box' value={seed} onChange={this.changeHandler} />
             </div> 
+            <div className='input_field'>
+                Return Times: 
+                <input type="number" name="numreturn" className='input-box' value={numreturn} onChange={this.changeHandler} />
+            </div> 
           
           </div><br></br>
           
           <div className='ask'>
             <textarea type="text" className="question" name="prompt" value={prompt} onChange={this.changeHandler} required/>
-            <textarea name="result" className="result" value={result}/>
+            <textarea name="result" className="result" value={result} readOnly/>
           </div><br></br>
             
             <button type="submit" className="submit">Generate</button> 

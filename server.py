@@ -21,6 +21,7 @@ class TextConfig(Config):
     do_sample = True
     temp = 1.0
     seed = 1
+    numreturn = 1
 
 class ImageConfig(Config):
     num_inference_steps = 75

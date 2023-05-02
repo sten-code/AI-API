@@ -1,12 +1,15 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
-import os
-#import server
+from transformers import AutoTokenizer, GPTJForCausalLM, set_seed
+import server
 
-
-def generate(prompt: str) -> str:
- 
-    tokenizer = AutoTokenizer.from_pretrained(facebook/opt-1.3b)
-    model = AutoModelForCausalLM.from_pretrained(facebook/opt-1.3b)
-    generator = pipeline("text-generation", model=model, tokenizer=tokenizer, do_sample=True, max_new_tokens=200)
-    return generator(prompt)
-
+def generate(prompt: str, config: server.TextConfig) -> str:
+    set_seed(config.seed)
+    tokenizer = AutoTokenizer.from_pretrained("./GPTJ-6B/")
+    model = GPTJForCausalLM.from_pretrained(
+        "./GPTJ-6B/",
+        max_length=config.max_new_tokens,
+        temperature=config.temp,
+        do_sample=config.do_sample
+    )
+    encoded_input = tokenizer(prompt, return_tensors='pt')
+    output = model.generate(**encoded_input)[0]
+    return tokenizer.decode(output)

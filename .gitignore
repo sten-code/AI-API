@@ -1,6 +1,6 @@
-/models/**/*/model/*
-/models/**/*/__pycache__/
-/__pycache__/
-node_modules
-node_modules
+.git
+__pycache__
 huggingface
+node_modules
+.gitattributes
+.vscode
