@@ -5,9 +5,13 @@ import importlib.util
 from typing import Type
 import time
 import pathlib
+from flask_cors import CORS
+import os
+os.environ["TRANSFORMERS_CACHE"] = "./huggingface/hub"
 
 debug = True
 app = Flask(__name__)
+CORS(app)
 
 class Config:
     pass
@@ -15,6 +19,8 @@ class Config:
 class TextConfig(Config):
     max_new_tokens = 200
     do_sample = True
+    temp = 1.0
+    seed = 1
 
 class ImageConfig(Config):
     num_inference_steps = 75
