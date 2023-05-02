@@ -1,6 +1,0 @@
-.git
-__pycache__
-huggingface
-node_modules
-.gitattributes
-.vscode
