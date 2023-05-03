@@ -9,7 +9,7 @@ from flask_cors import CORS
 import os
 os.environ["TRANSFORMERS_CACHE"] = "./huggingface/hub"
 
-debug = True
+debug = False
 app = Flask(__name__)
 CORS(app)
 
@@ -26,6 +26,7 @@ class TextConfig(Config):
 class ImageConfig(Config):
     num_inference_steps = 75
     guidance_scale = 7.5
+    seed = 42
 
 def generate_text(model: str, prompt: str, config: TextConfig) -> str:
     spec = importlib.util.spec_from_file_location("model", "models\\text-generation\\" + model + "\\model.py")
@@ -93,11 +94,11 @@ def text_generate():
     return {"duration": total, "response": response}
 
 def generate_image(model: str, prompt: str, config: ImageConfig):
-    spec = importlib.util.spec_from_file_location("model", "models\\stable-diffusion\\" + model + "\\model.py")
+    spec = importlib.util.spec_from_file_location("model", "models\\image-generation\\" + model + "\\model.py")
     model = spec.loader.load_module()
     return model.generate(prompt, config)
 
-@app.route("/stable-diffusion/generate", methods=["POST"])
+@app.route("/image-generation/generate", methods=["POST"])
 def image_generate():
     data = request.get_json()
     if not isinstance(data, dict):
@@ -114,7 +115,7 @@ def image_generate():
         return {"error": "'model' must be a string."}
 
     models = get_models()
-    if (text_models := models.get("stable-diffusion")) is None:
+    if (text_models := models.get("image-generation")) is None:
         return {"error": "There are currently no models available."}
     if model not in text_models:
         return {"error": f"'{model}' isn't an available model."}

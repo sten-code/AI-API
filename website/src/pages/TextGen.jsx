@@ -26,14 +26,11 @@ const getResult = async (jsonData) => {
     const generatedText = data.response
     console.log(generatedText)
     if (generatedText.constructor.name === "Array") {
-        console.log("array")
         const result = generatedText.map((a) => {
-            console.log(a.generated_text)
             return a.generated_text
         })
         return result.join("\n")
     } else {
-        console.log("no array")
         return generatedText
     }
 }
@@ -112,6 +109,11 @@ export class TextGen extends Component {
           <div className='config'>
             
             <div className='input_field'>
+                Model: 
+                <select name="model" className='input-box' value={model} onChange={this.changeHandler}  dangerouslySetInnerHTML={{ __html: models }}></select>
+            </div> 
+            
+            <div className='input_field'>
                 Tokens: 
                 <input type="number" name="max_new_tokens" min="10" max="10000" value={max_new_tokens} onChange={this.changeHandler} className='input-box'/>
             </div> 
@@ -129,10 +131,7 @@ export class TextGen extends Component {
                 </select>
             </div>
            
-            <div className='input_field'>
-                Model: 
-                <select name="model" className='input-box' value={model} onChange={this.changeHandler}  dangerouslySetInnerHTML={{ __html: models }}></select>
-            </div> 
+
             <div className='input_field'>
                 Seed: 
                 <input name="seed" className='input-box' value={seed} onChange={this.changeHandler} />

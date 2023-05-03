@@ -1,14 +1,14 @@
 from diffusers import StableDiffusionPipeline
+from transformers import set_seed
 import torch
-import os
-import time
 import server
 import base64
 from io import BytesIO
 
 
 def generate(prompt: str, config: server.TextConfig) -> str:
-    pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16).to("cuda")
+    set_seed(config.seed)
+    pipe = StableDiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1-base", torch_dtype=torch.float16).to("cuda")
 
     image = pipe(prompt, 512, 512, config.num_inference_steps, config.guidance_scale).images[0]
 

@@ -1,0 +1,13 @@
+flask
+flask-cors
+waitress
+typing
+time
+pathlib
+os
+diffusers
+server
+io
+base64
+torch==2.0.0+cu118
+transformers
