@@ -29,7 +29,7 @@ class ImageConfig(Config):
     seed = 42
 
 def generate_text(model: str, prompt: str, config: TextConfig) -> str:
-    spec = importlib.util.spec_from_file_location("model", "models\\text-generation\\" + model + "\\model.py")
+    spec = importlib.util.spec_from_file_location("model", "models/text-generation/" + model + "/model.py")
     model = spec.loader.load_module()
     return model.generate(prompt, config)
 
@@ -94,7 +94,7 @@ def text_generate():
     return {"duration": total, "response": response}
 
 def generate_image(model: str, prompt: str, config: ImageConfig):
-    spec = importlib.util.spec_from_file_location("model", "models\\image-generation\\" + model + "\\model.py")
+    spec = importlib.util.spec_from_file_location("model", "models/image-generation/" + model + "/model.py")
     model = spec.loader.load_module()
     return model.generate(prompt, config)
 
@@ -135,4 +135,4 @@ if __name__ == "__main__":
     if debug:
         app.run(debug=True)
     else:
-        serve(app, host="127.0.0.1", port=5000)
+        serve(app, host="0.0.0.0", port=5000)

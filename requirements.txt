@@ -1,13 +1,6 @@
 flask
 flask-cors
 waitress
-typing
-time
-pathlib
-os
-diffusers
-server
-io
-base64
-torch==2.0.0+cu118
 transformers
+diffusers
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 -> run seperate

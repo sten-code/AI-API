@@ -1,10 +1,6 @@
-pip install -r requirements.txt
-python server.py & disown
+python server.py & 
 cd website
-#curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&\
-#apt-get install -y nodejs
-npm run build
-#npm install -g serve
+npm run build 
 serve -s build -l 80
 
 
