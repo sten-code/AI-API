@@ -1,6 +1,5 @@
 python server.py & 
-cd website
-npm run build 
-serve -s build -l 80
+npm --prefix website run build 
+serve -s website/build -l 80
 
 
