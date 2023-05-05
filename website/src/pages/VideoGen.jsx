@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import '../css/ImageGen.css'
+import '../css/VideoGen.css'
+import video from "../video's/Sample.mp4"
+
 
 const getBoolean = (targetvalue) => {
   if (targetvalue === "false") {
@@ -13,11 +15,12 @@ const getBoolean = (targetvalue) => {
   }
 }
 
+
 const modelOptions = async () => {
   try {
     const res = await fetch('http://127.0.0.1:5000/models');
     const data = await res.json();
-    const textGenerationModels = data['image-generation'];
+    const textGenerationModels = data['video-generation'];
     const options = textGenerationModels.map((a) => { 
       return ('<option name="' + a +'">' + a + "</option> "   ) 
     });
@@ -28,8 +31,9 @@ const modelOptions = async () => {
   }
 }
 
+
 const getResult = async (jsonData) => { 
-  const res = await fetch("http://127.0.0.1:5000/image-generation/generate", {
+  const res = await fetch("http://127.0.0.1:5000/video-generation/generate", {
       method: 'POST',
       body: jsonData,
       headers: {
@@ -57,15 +61,19 @@ export class ImageGen extends Component {
     super(props)
   
     this.state = {
-      num_inference_steps: 75,
-      guidance_scale: 7.5,
-      model: "runwayml/stable-diffusion-v1-5",
+      model: "damo-vilab/text-to-video-ms-1.7b",
       models:"",
-      result: "",
+      result: video,
       seed: 42,
-      prompt: "What image do you want to generate?"
+      prompt: "What video do you want?",
+      num_frames: 20,
+      num_inference_steps: 50,
+      fps: 8
     }
   }
+  changeVideo = (source) => {
+    this.setState({ result: source})
+    }
   async componentDidMount() {
     modelOptions().then((result) => {
         this.setState({models: result})
@@ -82,20 +90,21 @@ export class ImageGen extends Component {
 
   }
 
+
   submitHandler = e => { 
     e.preventDefault()
-    const { prompt, model, seed, guidance_scale, num_inference_steps} = this.state;
-    const config = {num_inference_steps, seed, guidance_scale};
+    const { prompt, model, seed, num_frames, num_inference_steps, fps} = this.state;
+    const config = {seed, num_frames, num_inference_steps, fps};
     const data = { prompt, model, config };
     const jsonData = JSON.stringify(data);
     console.log(jsonData);
     getResult(jsonData).then((resultg) => {
-        this.setState({result: resultg})
+      this.setState({ result: resultg})
     })
 
   }
   render() {
-    const { prompt, model, seed, guidance_scale, num_inference_steps, models, result} = this.state;
+    const { prompt, model, seed, num_frames, num_inference_steps, result, models, videoKey, fps} = this.state;
     return (
       
       <div>
@@ -109,25 +118,33 @@ export class ImageGen extends Component {
                 <select name="model" className='input-box' value={model} onChange={this.changeHandler}  dangerouslySetInnerHTML={{ __html: models }}></select>
             </div> 
             
-            <div className='input_field'>
-                Steps: 
-                <input type="number" name="num_inference_steps" min="25" max="999" value={num_inference_steps} onChange={this.changeHandler} className='input-box'/>
-            </div> 
           
             <div className='input_field'>
                 Seed: 
                 <input name="seed" type="number" className='input-box' value={seed} onChange={this.changeHandler} />
             </div> 
             <div className='input_field'>
-                Guidence scale: 
-                <input type="number" name="guidance_scale" className='input-box' value={guidance_scale} onChange={this.changeHandler} />
+                Frames: 
+                <input name="num_frames" type="number" className='input-box' value={num_frames} onChange={this.changeHandler} />
+            </div> 
+            <div className='input_field'>
+                Steps: 
+                <input name="num_inference_steps" type="number" className='input-box' value={num_inference_steps} onChange={this.changeHandler} />
+            </div> 
+            <div className='input_field'>
+                Fps: 
+                <input name="fps" type="number" className='input-box' value={fps} onChange={this.changeHandler} />
             </div> 
           
           </div><br></br>
           
           <div className='ask'>
             <textarea type="text" className="question" name="prompt" value={prompt} onChange={this.changeHandler} required/>
-            <div className="result"><img src={result} alt="Your generated frame here"/></div> 
+            <div className="result">
+              
+            <video src={result} type="video/mp4" controls/>
+   
+            </div> 
           </div><br></br>
             
             <button type="submit" className="submit">Generate</button> 

@@ -22,6 +22,9 @@ export class Navbar extends Component {
               <li className="nav-item">
                   <Link to="/voicegen" className="nav-link">Voice generation</Link>
               </li>
+              <li className="nav-item">
+                  <Link to="/videogen" className="nav-link">Video generation</Link>
+              </li>
           </ul>
         </nav>
       </header>

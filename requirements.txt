@@ -3,4 +3,10 @@ flask-cors
 waitress
 transformers
 diffusers
+moviepy
+tempfile
+cv2
+numpy
+time
+os
 # pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 -> run seperate

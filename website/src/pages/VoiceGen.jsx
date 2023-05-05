@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import React, { Component } from 'react'
 import '../css/VoiceGen.css'
 
 
@@ -63,7 +63,7 @@ export class ImageGen extends Component {
       models:"",
       result: "",
       seed: 42,
-      prompt: "What phrase to do want to have spoken out?",
+      prompt: "What phrase do you want to have spoken out",
       samplerate: 16000
     }
   }
